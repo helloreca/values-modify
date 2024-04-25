@@ -1,0 +1,55 @@
+alertmanager:
+  enabled: false
+
+grafana:
+  adminPassword: [new passworld]
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+
+    ## Labels to be added to the Ingress
+    ##
+    hosts:
+      - [url to external access] 
+  persistence:
+    type: pvc
+    enabled: true
+    storageClassName: gp3
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
+    # annotations: {}
+    finalizers:
+      - kubernetes.io/pvc-protection
+  grafana.ini:
+    smtp:
+      enabled: true
+      existingSecret: ""
+      from_address: "mail"
+      from_name: "subtitle"
+      host: "smtp config"
+      password: ""
+      user: "mail           
+prometheusOperator:
+  enabled: true
+prometheus:
+  enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"  
+    hosts: 
+      - [external url]
+    storageSpec:    
+      volumeClaimTemplate:
+        spec: 
+          storageClassName: gp3
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
